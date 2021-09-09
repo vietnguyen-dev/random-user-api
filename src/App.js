@@ -12,19 +12,24 @@ function App() {
   }, [randUser])
 
   const randPersonHandler = async () =>{
-    let response = await fetch(`https://randomuser.me/api`);
-    console.log(response)
-    let data = await response.json()
-    console.log(data.results)
-    let randUserData = data.results.map(user =>{
-      return {
-        id: user.email,
-        name: `${user.name.first} ${user.name.last}`,
-        gender: user.gender,
-      }
-    })
-    console.log(randUserData)
-    setRandUser(randUserData);
+    try {
+      let response = await fetch(`https://randomuser.me/api`);
+      console.log(response)
+      let data = await response.json()
+      console.log(data.results)
+      let randUserData = data.results.map(user =>{
+        return {
+          id: user.email,
+          name: `${user.name.first} ${user.name.last}`,
+          gender: user.gender,
+        }
+      })
+      console.log(randUserData)
+      setRandUser(randUserData);
+    } catch(err){
+      console.error(err)
+    }
+   
     
   }
 
