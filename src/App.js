@@ -5,13 +5,15 @@ import UserList from './components/UserList';
 
 function App() {
   const [loaded, setLoaded] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [randUser, setRandUser] = useState([])
 
-  useEffect(() =>{
-   setLoaded(true);
-  }, [randUser])
+  // useEffect(() =>{
+  //  setLoaded(true);
+  // }, [randUser])
 
   const randPersonHandler = async () =>{
+    setLoading(true)
     try {
       let response = await fetch(`https://randomuser.me/api`);
       console.log(response)
@@ -26,19 +28,18 @@ function App() {
       })
       console.log(randUserData)
       setRandUser(randUserData);
+      setLoaded(true);
     } catch(err){
       console.error(err)
     }
-   
-    
+    setLoading(false);
   }
 
   return (
     <div className="App">
-      {
-        loaded && <UserList users={randUser}/>
-      }
-     <button onClick={randPersonHandler}>Fetch Random Person </button>
+      {loaded && <UserList users={randUser}/>}
+      {loading && <p>Loading...</p>}
+      <button onClick={randPersonHandler}>add Random Person </button>
     </div>
   );
 }
