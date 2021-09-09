@@ -1,23 +1,23 @@
-import logo from './logo.svg';
+import { useState } from 'react'
 import './App.css';
 
 function App() {
+  let [randUser, setRandUser] = useState([])
+
+  const randPersonHandler = async () =>{
+    let response = await fetch(`https://randomuser.me/api`);
+    console.log(response)
+    let data = await response.json()
+    setRandUser(data.results)
+    console.log(data.results)
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {/* <pre>
+        {randUser}
+      </pre> */}
+     <button onClick={randPersonHandler}>Fetch Random Person </button>
     </div>
   );
 }
