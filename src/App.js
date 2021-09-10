@@ -1,24 +1,25 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 import './App.css';
 import UserList from './components/UserList';
 
 function App() {
-  const [loaded, setLoaded] = useState(false)
   const [loading, setLoading] = useState(false);
   const [randUser, setRandUser] = useState([])
-
-  // useEffect(() =>{
-  //  setLoaded(true);
-  // }, [randUser])
+  const [error, setError] = useState(null)
 
   const randPersonHandler = async () =>{
     setLoading(true)
     try {
       let response = await fetch(`https://randomuser.me/api`);
       console.log(response)
+
+      if (response.status !== 200){
+        throw Error('Call Failed')
+      }
+
       let data = await response.json()
-      console.log(data.results)
+      //console.log(data.results)
       let randUserData = data.results.map(user =>{
         return {
           id: user.email,
@@ -26,20 +27,26 @@ function App() {
           gender: user.gender,
         }
       })
-      console.log(randUserData)
-      setRandUser(randUserData);
-      setLoaded(true);
+      // console.log(randUserData[0])
+      setRandUser(() =>{
+        return [...randUser, randUserData[0]]});
     } catch(err){
-      console.error(err)
+      setError(err.message)
+      //console.log(err)
     }
     setLoading(false);
   }
 
   return (
     <div className="App">
-      {loaded && <UserList users={randUser}/>}
-      {loading && <p>Loading...</p>}
-      <button onClick={randPersonHandler}>add Random Person </button>
+      <div>
+        {!loading && <UserList users={randUser} />}
+        {loading && <p>Loading...</p>}
+        {!loading && error && <p>{error}</p>}
+      </div>
+      <div>
+        <button onClick={randPersonHandler}>add Random Person </button>
+      </div>
     </div>
   );
 }
