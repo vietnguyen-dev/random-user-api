@@ -3,6 +3,8 @@ import { useState } from 'react'
 import './App.css';
 import UserList from './components/UserList';
 
+//https://randomuser.me/documentation#intro
+
 function App() {
   const [loading, setLoading] = useState(false);
   const [randUser, setRandUser] = useState([])
